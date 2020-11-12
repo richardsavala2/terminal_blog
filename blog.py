@@ -1,3 +1,4 @@
+from database import Database
 from models.post import Post
 import uuid
 import datetime
@@ -22,10 +23,22 @@ class Blog(object):
         post.save_to_mongo()
 
     def get_posts(self):
-        pass
+        return Post.from_blog(self.id)
+
     def save_to_mongo(self):
-        pass
+        Database.insert(collection='blogs', data=self.json())
+
     def json(self):
-        pass
-    def get_from_mongo(self):
-        pass
+        return {
+            'author': self.author,
+            'title': self.author,
+            'description': self.description,
+            'id': self.id
+        }
+    @classmethod
+    def get_from_mongo(cls, id):
+        blog_data = Database.find_one(collection='blogs', query={'id': id})
+        return cls(author=blog_data['author'],
+                   title=blog_data['title'],
+                   description=blog_data['description'],
+                   id=blog_data['id'])
