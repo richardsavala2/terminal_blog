@@ -10,7 +10,7 @@ class Post(object):
         self.title = title
         self.content = content
         self.author = author
-        self.date = date
+        self.created_date = date
         self.id = uuid.uuid4().hex if id is None else id
 
     def save_to_mongo(self):
@@ -22,9 +22,9 @@ class Post(object):
             'id': self.id,
             'blog_id': self.blog_id,
             'author': self.author,
-            'content': self.content,
             'title': self.title,
-            'created_date': self.date
+            'content': self.content,
+            'created_date': self.created_date
         }
 
     @classmethod
@@ -33,7 +33,7 @@ class Post(object):
         return cls(blog_id=post_data['blog_id'],
                    title=post_data['title'],
                    content=post_data['content'],
-                   author=post_data['content'],
+                   author=post_data['author'],
                    date=post_data['created_date'],
                    id=post_data['id'])
 
